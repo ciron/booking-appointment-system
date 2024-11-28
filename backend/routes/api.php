@@ -1,4 +1,6 @@
 <?php
+namespace  App\Http\Controllers;
+
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Routes for doctors
+Route::middleware(['auth', 'isDoctor'])->group(function () {
+    Route::get('/doctor/dashboard', [DoctorController::class, 'dashboard']);
+    Route::post('/doctor/schedule', [DoctorController::class, 'updateSchedule']);
+});
+
+// Routes for patients
+Route::middleware(['auth', 'isPatient'])->group(function () {
+    Route::get('/patient/dashboard', [PatientController::class, 'dashboard']);
+    Route::post('/patient/book-appointment', [PatientController::class, 'bookAppointment']);
 });
