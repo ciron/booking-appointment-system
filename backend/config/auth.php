@@ -15,7 +15,7 @@ return [
 
     'defaults' => [
         'guard' => 'web',
-        'passwords' => 'users',
+        'passwords' => 'patients',
     ],
 
     /*
@@ -38,12 +38,20 @@ return [
 
     'guards' => [
         'doctor' => [
-            'driver' => 'session',
+            'driver' => 'passport',
             'provider' => 'doctors',
         ],
         'patient' => [
-            'driver' => 'session',
+            'driver' => 'passport',
             'provider' => 'patients',
+        ],
+        'guest' => [
+            'driver' => 'session',
+            'provider' => null, // Guests don't authenticate against any provider
+        ],
+        'web' => [
+            'driver' => 'session', // Minimal configuration
+            'provider' => 'patients',    // No provider, just placeholder
         ],
     ],
 
