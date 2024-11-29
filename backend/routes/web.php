@@ -1,5 +1,5 @@
 <?php
-
+namespace  App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::prefix('doctor')->group(function () {
+    Route::get('/login', [DoctorController::class, 'loginForm'])->name('login');
+    Route::get('/register', [DoctorController::class, 'registerForm'])->name('register');
+    Route::post('/register', [DoctorController::class, 'register']);
+    Route::post('/login', [DoctorController::class, 'login'])->name('loginPost');
+
+    Route::middleware(['auth:doctor', 'isDoctor'])->group(function () {
+        Route::get('/dashboard', [DoctorController::class, 'Dashboard'])->name('dashboard');
+        Route::post('/schedule', [DoctorController::class, 'updateSchedule']);
+    });
 });

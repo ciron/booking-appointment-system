@@ -38,7 +38,7 @@ return [
 
     'guards' => [
         'doctor' => [
-            'driver' => 'passport',
+            'driver' => 'session',
             'provider' => 'doctors',
         ],
         'patient' => [

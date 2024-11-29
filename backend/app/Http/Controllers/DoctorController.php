@@ -12,6 +12,16 @@ use Illuminate\Validation\ValidationException;
 class DoctorController extends Controller
 {
 
+    public function loginForm()
+    {
+        return view('login');
+    }
+
+    public function registerForm()
+    {
+        return view('Register');
+    }
+
     public function register(Request $request)
     {
 
@@ -50,36 +60,35 @@ class DoctorController extends Controller
 
     public function login(Request $request)
     {
+
         if (Auth::guard('doctor')->check()) {
-            $doctor = Auth::guard('doctor')->user();
-            return response()->json([
-                'message' => 'You are already logged in.',
-                'doctor' => $doctor,
-            ]);
+
+           return redirect()->route('dashboard');
         }
-
-
+        dd($request->all());
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-
-
         $doctor = Doctor::where('email', $credentials['email'])->first();
 
+        // Check if doctor exists and password matches
+        dd($doctor);
         if ($doctor && Hash::check($credentials['password'], $doctor->password)) {
-            // Generate the authentication token
-            $token = $doctor->createToken('doctor-auth-token')->accessToken;
-
-            // Return success response with token
-            return response()->json([
-                'message' => 'Login successful',
-                'doctor' => $doctor,
-                'token' => $token,
-            ]);
+            dd($doctor);
+            // Log in the doctor
+            Auth::guard('doctor')->login($doctor);
+            return redirect()->route('dashboard')->with('message', 'Login successful');
         }
 
+        // If authentication fails, throw validation exception with error message
         throw ValidationException::withMessages(['email' => 'Invalid credentials.']);
+    }
+
+
+    public function Dashboard()
+    {
+        return view('Dashboard');
     }
 }
