@@ -21,6 +21,10 @@ Route::prefix('doctor')->group(function () {
 
     Route::middleware(['auth:doctor', 'isDoctor'])->group(function () {
         Route::get('/dashboard', [DoctorController::class, 'Dashboard'])->name('dashboard');
+        Route::get('/manage-calender', [DoctorController::class, 'ManageCalender'])->name('ManageCalender');
+        Route::post('/logout', [DoctorController::class, 'logout'])->name('logout');
         Route::post('/schedule', [DoctorController::class, 'updateSchedule']);
+        Route::post('/addNewSlot', [DoctorController::class, 'addNewSlot'])->name('addNewSlot');
+        Route::get('/AvailableForCreate', [DoctorController::class, 'AvailableForCreate'])->name('AvailableForCreate');
     });
 });

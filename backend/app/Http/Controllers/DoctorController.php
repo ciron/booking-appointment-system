@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use App\Models\DoctorSlot;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -65,7 +67,7 @@ class DoctorController extends Controller
 
            return redirect()->route('dashboard');
         }
-        dd($request->all());
+
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
@@ -74,10 +76,9 @@ class DoctorController extends Controller
         $doctor = Doctor::where('email', $credentials['email'])->first();
 
         // Check if doctor exists and password matches
-        dd($doctor);
+
         if ($doctor && Hash::check($credentials['password'], $doctor->password)) {
-            dd($doctor);
-            // Log in the doctor
+
             Auth::guard('doctor')->login($doctor);
             return redirect()->route('dashboard')->with('message', 'Login successful');
         }
@@ -90,5 +91,69 @@ class DoctorController extends Controller
     public function Dashboard()
     {
         return view('Dashboard');
+    }
+
+    public function ManageCalender()
+    {
+        $created_slot = DoctorSlot::where('doctor_id',Auth::guard('doctor')->user()->id)->get();
+        $avaliable_slot =  AvailableSlot($created_slot->pluck('name')->toArray());
+
+
+
+        // Define all possible time slots
+       $allSlots = All_slots();
+
+        // Map available slots for quick lookup
+        $availableMap = [];
+        foreach ($created_slot as $slot) {
+            $availableMap[$slot['date']][] = $slot['name'];
+        }
+
+        // Generate events
+        $events = [];
+        foreach ($availableMap as $date => $slots) {
+            $events = array_merge($events, generateEvents($date, $allSlots, $availableMap));
+        }
+
+
+        return view('Doctorcalender',compact('avaliable_slot','created_slot','events'));
+    }
+
+    public function AvailableForCreate(Request $request)
+    {
+
+        $created_slot = DoctorSlot::where('doctor_id',Auth::guard('doctor')->user()->id)->where('date',Carbon::parse($request->date)->format('Y-m-d'))->get();
+        $avaliable_slot =  AvailableSlot($created_slot->pluck('name')->toArray());
+
+
+        return view('Slotdropdown',compact('avaliable_slot'));
+    }
+
+    public function addNewSlot(Request $request)
+    {
+        $request->validate([
+            'date'=>'required',
+            'slot'=>'required'
+        ]);
+       if(!empty( $request->slot) && count($request->slot)){
+           foreach( $request->slot as $row){
+               DoctorSlot::create([
+                   'date'=>Carbon::parse($request->date)->format('Y-m-d'),
+                   'name'=>$row,
+                   'doctor_id'=>Auth::guard('doctor')->user()->id,
+               ]);
+           }
+       }
+
+       return back();
+
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('doctor')->logout(); // Log out the user
+
+
+        return redirect()->route('login'); // Redirect to the login page
     }
 }
