@@ -26,9 +26,6 @@ class DoctorController extends Controller
 
     public function register(Request $request)
     {
-
-
-
         try {
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
@@ -37,14 +34,9 @@ class DoctorController extends Controller
                 'specialization' => 'required|string|max:255',
             ]);
             DB::beginTransaction();
-
             $validatedData['password'] = Hash::make($validatedData['password']);
-
-
             $doctor = Doctor::create($validatedData);
-
             $token = $doctor->createToken('doctor-auth-token')->accessToken;
-
             DB::commit();
             return response()->json([
                 'message' => 'Doctor registered successfully',
@@ -75,15 +67,13 @@ class DoctorController extends Controller
 
         $doctor = Doctor::where('email', $credentials['email'])->first();
 
-        // Check if doctor exists and password matches
+
 
         if ($doctor && Hash::check($credentials['password'], $doctor->password)) {
-
             Auth::guard('doctor')->login($doctor);
             return redirect()->route('dashboard')->with('message', 'Login successful');
         }
 
-        // If authentication fails, throw validation exception with error message
         throw ValidationException::withMessages(['email' => 'Invalid credentials.']);
     }
 
@@ -98,34 +88,24 @@ class DoctorController extends Controller
         $created_slot = DoctorSlot::where('doctor_id',Auth::guard('doctor')->user()->id)->get();
         $avaliable_slot =  AvailableSlot($created_slot->pluck('name')->toArray());
 
-
-
-        // Define all possible time slots
        $allSlots = All_slots();
 
-        // Map available slots for quick lookup
         $availableMap = [];
         foreach ($created_slot as $slot) {
             $availableMap[$slot['date']][] = $slot['name'];
         }
 
-        // Generate events
         $events = [];
         foreach ($availableMap as $date => $slots) {
             $events = array_merge($events, generateEvents($date, $allSlots, $availableMap));
         }
-
-
         return view('Doctorcalender',compact('avaliable_slot','created_slot','events'));
     }
 
     public function AvailableForCreate(Request $request)
     {
-
         $created_slot = DoctorSlot::where('doctor_id',Auth::guard('doctor')->user()->id)->where('date',Carbon::parse($request->date)->format('Y-m-d'))->get();
         $avaliable_slot =  AvailableSlot($created_slot->pluck('name')->toArray());
-
-
         return view('Slotdropdown',compact('avaliable_slot'));
     }
 
@@ -144,16 +124,13 @@ class DoctorController extends Controller
                ]);
            }
        }
-
        return back();
 
     }
 
     public function logout(Request $request)
     {
-        Auth::guard('doctor')->logout(); // Log out the user
-
-
-        return redirect()->route('login'); // Redirect to the login page
+        Auth::guard('doctor')->logout();
+        return redirect()->route('login');
     }
 }

@@ -51,7 +51,11 @@ return [
         ],
         'web' => [
             'driver' => 'session', // Minimal configuration
-            'provider' => 'patients',    // No provider, just placeholder
+            'provider' => 'doctors',    // No provider, just placeholder
+        ],
+        'api' => [
+            'driver' => 'passport',
+            'provider' => 'patients', // Use the appropriate provider for patient guard
         ],
     ],
 

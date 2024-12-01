@@ -19,17 +19,16 @@ use Illuminate\Support\Facades\Route;
 // Routes for doctors
 Route::middleware('guest')->group(function () {
 
-
-
     // Routes for patients
 
     Route::prefix('patient')->group(function () {
         Route::post('/register', [PatientController::class, 'register']);
         Route::post('/login', [PatientController::class, 'login']);
 
-        Route::middleware(['auth', 'isPatient'])->group(function () {
-            Route::get('/patient/dashboard', [PatientController::class, 'dashboard']);
-            Route::post('/patient/book-appointment', [PatientController::class, 'bookAppointment']);
+        Route::middleware(['isPatient'])->group(function () {
+            Route::post('/appointments/book', [AppointmentController::class, 'bookAppointment']);
+            Route::put('/appointments/{id}/confirm', [AppointmentController::class, 'confirmAppointment']);
+            Route::put('/appointments/{id}/cancel', [AppointmentController::class, 'cancelAppointment']);
         });
     });
 });

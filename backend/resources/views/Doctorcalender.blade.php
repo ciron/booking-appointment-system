@@ -51,30 +51,24 @@
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
         <script>
-            // Initialize Select2
+
             $(document).ready(function() {
                 $('.select2').select2();
             });
         </script>
-
-
-
-
         <script>
-
-            var  event_data =   @json($events);;
-
+            var  event_data =   @json($events);
             document.addEventListener('DOMContentLoaded', function() {
                 var calendarEl = document.getElementById('calendar');
 
                 var calendar = new FullCalendar.Calendar(calendarEl, {
                     height: 600,
 
-                    initialView: 'dayGridMonth', // Show weekly view by default
-                    allDaySlot: false, // Disable all-day slot
-                    minTime: "08:00:00", // Set minimum time for availability
-                    maxTime: "20:00:00", // Set maximum time for availability
-                    slotDuration: "01:00:00", // 1-hour slots
+                    initialView: 'dayGridMonth',
+                    allDaySlot: false,
+                    minTime: "08:00:00",
+                    maxTime: "20:00:00",
+                    slotDuration: "01:00:00",
                     events:event_data,
                     selectable: true, // Allow selection of slots
                     select: function(info) {
@@ -89,18 +83,17 @@
 
             $(document).ready(function() {
                 $('#date').on('change', function() {
-                    // Get the new value of the input
+
                     let date = $(this).val();
                     var url = "{{ route('AvailableForCreate') }}";
                     if (date) {
                         $.ajax({
-                            url: url,  // Replace with your server endpoint
-                            method: 'get',  // Use the appropriate HTTP method (GET, POST, etc.)
+                            url: url,
+                            method: 'get',
                             data: {
-                                date: date  // Send the selected date to the server
+                                date: date
                             },
                             success: function(response) {
-
                                 $('#slot_data').html(response);
                             },
                             error: function(xhr, status, error) {
