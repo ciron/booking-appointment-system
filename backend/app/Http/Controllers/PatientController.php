@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Mail\AppointmentNotification;
 use App\Models\Appointment;
+use App\Models\DoctorSlot;
 use App\Models\Patient;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -68,6 +70,30 @@ class PatientController extends Controller
 
             return response()->json([
                 'message' => 'An error occurred while registering the patient.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function GetAvailableSlot(Request $request)
+    {
+
+        try {
+            $request->validate([
+                'timeslot' => 'required',
+                'appointment_date' => 'required',
+                'doctor_id' => 'required|exists:doctors,id',
+            ]);
+
+//            $appointment = DoctorSlot::where('')
+
+//            $this->sendEmailNotification($appointment, 'Appointment booked');
+
+//            return response()->json($appointment, 201);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'message' => 'An error occurred while booking the appointment.',
                 'error' => $e->getMessage()
             ], 500);
         }

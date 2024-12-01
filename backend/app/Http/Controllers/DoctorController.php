@@ -128,6 +128,18 @@ class DoctorController extends Controller
 
     }
 
+    public function DoctorList(){
+        try {
+            $doctorList = Doctor::whereHas('slots')->latest()->get();
+            return successResponse($doctorList,'Doctor list','201');
+
+        } catch (\Exception $e) {
+            return failureResponse('An error occurred while get doctor list.',500,$e->getMessage());
+        }
+    }
+
+
+
     public function logout(Request $request)
     {
         Auth::guard('doctor')->logout();

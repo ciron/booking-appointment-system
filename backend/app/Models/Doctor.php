@@ -25,6 +25,11 @@ class Doctor extends Authenticatable
     {
         return $this->hasMany(Appointment::class);
     }
+    public function slots()
+    {
+        return $this->hasMany(DoctorSlot::class);
+    }
+
 
     protected $casts = [
 

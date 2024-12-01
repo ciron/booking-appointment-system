@@ -33,3 +33,27 @@ export const loginUser = async (userData) => {
         throw new Error('Login failed');
     }
 };
+export const fetchDoctors = async () => {
+    try {
+        const token = localStorage.getItem('authToken'); // Retrieve the token from local storage
+
+        const response = await fetch(`${BASE_URL}/patient/doctor-list`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        const result = await response.json(); // Parse the response
+
+        if (response.ok && result.type === 'success') {
+            return result.data; // Return the doctor list
+        } else {
+            throw new Error(result.message || "Failed to fetch doctor list");
+        }
+    } catch (error) {
+        console.error("Error in API call:", error);
+        throw error;
+    }
+};
