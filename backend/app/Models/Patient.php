@@ -18,7 +18,6 @@ class Patient extends Model
 
     protected $hidden = [
         'password',
-
     ];
     public function appointments()
     {

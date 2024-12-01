@@ -30,14 +30,13 @@ class PatientController extends Controller
             ]);
             DB::commit();
             $token = $patient->createToken('PatientApp')->accessToken;
-            return response()->json(['token' => $token, 'data' => $patient], 201);
+            $patient['token'] = $token;
 
+            return successResponse($patient,'Registration Successfully','201');
         } catch (\Exception $e) {
           DB::rollBack();
-            return response()->json([
-                'message' => 'An error occurred while registering the patient.',
-                'error' => $e->getMessage()
-            ], 500);
+            return failureResponse('An error occurred while registering the patient.',500,$e->getMessage());
+
         }
     }
 

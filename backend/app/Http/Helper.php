@@ -70,3 +70,24 @@ function generateEvents($date, $allSlots, $availableMap)
 
     return $events;
 }
+
+
+function successResponse($data = null, $message = '', $status = 200)
+{
+    return response()->json([
+        'type' => 'success',
+        'message' => $message,
+        'data' => $data,
+        'status' => $status,
+    ], $status);
+}
+
+function failureResponse($message = '', $status = 400, $data = null)
+{
+    return response()->json([
+        'type' => 'error',
+        'message' => $message,
+        'data' => $data,
+        'status' => $status,
+    ], $status);
+}

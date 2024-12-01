@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('/{any}', function () {
+    return view('welcome');
+})->where('any', '.*');
 Route::prefix('doctor')->group(function () {
     Route::get('/login', [DoctorController::class, 'loginForm'])->name('login');
     Route::get('/register', [DoctorController::class, 'registerForm'])->name('register');
