@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from
 import LoginPage from './components/LoginPage';
 import RegistrationPage from './components/RegistrationPage';
 import AuthenticatePatient from './components/AuthenticatePatient';
+import Availableslot from './components/Availableslot';
 
 const App = () => {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegistrationPage />} />
             <Route path="/authenticate-patient" element={<AuthenticatePatient />} />
+            <Route path="/available-slot/:doctorId" element={<Availableslot />} />
         </Routes>
     );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { fetchDoctors } from "../Util/api"; // Import API utility
 
@@ -47,12 +48,15 @@ const AuthenticatePatient = () => {
                                 <div className="card-body">
                                     <h5 className="card-title">{doctor.name}</h5>
                                     <h6 className="card-subtitle mb-2 text-muted">
-                                        {doctor.specialization}
+                                       Specialization: {doctor.specialization}
                                     </h6>
                                     <p className="card-text">Email: {doctor.email}</p>
-                                    <a href={`/doctor/${doctor.id}`} className="btn btn-primary">
+                                    <Link
+                                        to={`/available-slot/${doctor.id}`}
+                                        className="btn btn-primary"
+                                    >
                                         View Profile
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
