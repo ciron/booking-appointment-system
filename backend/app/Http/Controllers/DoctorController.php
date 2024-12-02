@@ -138,6 +138,16 @@ class DoctorController extends Controller
         }
     }
 
+    public function DoctorAvailableSlot($id){
+        try {
+            $doctorslotList = Doctor::with('slots')->find($id);
+            return successResponse($doctorslotList,'Doctor Slot List','201');
+
+        } catch (\Exception $e) {
+            return failureResponse('An error occurred while get doctor list.',500,$e->getMessage());
+        }
+    }
+
 
 
     public function logout(Request $request)

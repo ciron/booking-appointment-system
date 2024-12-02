@@ -28,6 +28,7 @@ Route::middleware('guest')->group(function () {
         Route::middleware(['isPatient'])->group(function () {
 
             Route::get('/doctor-list', [DoctorController::class, 'DoctorList']);
+            Route::get('/doctor-slot-list/{id}', [DoctorController::class, 'DoctorAvailableSlot']);
             Route::post('/appointments/book', [AppointmentController::class, 'bookAppointment']);
             Route::put('/appointments/{id}/confirm', [AppointmentController::class, 'confirmAppointment']);
             Route::put('/appointments/{id}/cancel', [AppointmentController::class, 'cancelAppointment']);
