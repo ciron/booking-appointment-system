@@ -14,11 +14,19 @@ const LoginPage = () => {
 
         try {
             const response = await loginUser(userData);
-            if (response.success) {
-                localStorage.setItem('authToken', response.token);  // Save the token to localStorage or sessionStorage
-                navigate('/authenticated-landing');  // Redirect to the authenticated landing page
+            console.log(response);
+            if (response.type === 'success') {
+                if (response.data && response.data.token) {
+                    localStorage.setItem('userName', response.data.name);
+                    localStorage.setItem('authToken', response.data.token);
+
+                    navigate('/authenticate-patient');
+                } else {
+
+                    setError('Something went wrong. No token received.');
+                }
             } else {
-                setError(response.message);
+                setError(response.message);  // Display error message if the response type is not success
             }
         } catch (error) {
             setError('Login failed');

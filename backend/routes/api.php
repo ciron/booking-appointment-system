@@ -32,6 +32,7 @@ Route::middleware('guest')->group(function () {
             Route::post('/appointments/book', [AppointmentController::class, 'bookAppointment']);
             Route::put('/appointments/{id}/confirm', [AppointmentController::class, 'confirmAppointment']);
             Route::put('/appointments/{id}/cancel', [AppointmentController::class, 'cancelAppointment']);
+            Route::post('/logout', [PatientController::class, 'Logout']);
         });
     });
 });

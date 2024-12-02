@@ -7,19 +7,26 @@ import LoginPage from './components/LoginPage';
 import RegistrationPage from './components/RegistrationPage';
 import AuthenticatePatient from './components/AuthenticatePatient';
 import Availableslot from './components/Availableslot';
+import BookingConfirmation from './components/Bookingconfirmation';
 
 const App = () => {
     const navigate = useNavigate();
-    const location = useLocation();  // Get the current route location
+    const location = useLocation();
 
     useEffect(() => {
-        const isAuthenticated = localStorage.getItem('authToken');  // Check for token or session
+        const authToken = localStorage.getItem('authToken');
+        const isAuthenticated = Boolean(authToken);
 
-        // Only redirect if the user is not authenticated and is not already on login or register pages
-        if (!isAuthenticated && location.pathname !== '/login' && location.pathname !== '/register') {
-            navigate('/login');  // Redirect to login page if not logged in
-        } else if (isAuthenticated && location.pathname === '/login') {
-            navigate('/authenticate-patient');  // Redirect to authenticated patient page if logged in and on login page
+        if (!isAuthenticated) {
+
+            if (location?.pathname !== '/login' && location?.pathname !== '/register') {
+                navigate('/login');
+            }
+        } else {
+
+            if (['/login', '/'].includes(location?.pathname)) {
+                navigate('/authenticate-patient');
+            }
         }
     }, [navigate, location]);
 
@@ -29,6 +36,7 @@ const App = () => {
             <Route path="/register" element={<RegistrationPage />} />
             <Route path="/authenticate-patient" element={<AuthenticatePatient />} />
             <Route path="/available-slot/:doctorId" element={<Availableslot />} />
+            <Route path="/booking-confirmation/:slotId" element={<BookingConfirmation />} />
         </Routes>
     );
 };

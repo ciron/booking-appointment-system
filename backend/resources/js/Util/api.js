@@ -82,3 +82,58 @@ export const fetchAvailableSlots = async (doctorId) => {
         throw error; // Re-throw the error to be handled by the calling code
     }
 };
+
+
+export const bookSlot = async (slotId, doctorId) => {
+    try {
+            const token = localStorage.getItem('authToken');
+            const response = await fetch(`${BASE_URL}/patient/appointments/book`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    slot_id: slotId,
+                    doctor_id: doctorId,
+                }),
+            });
+
+            const result = await response.json();
+            if (response.ok && result.type === 'success') {
+                return result.data; // Return the doctor list
+            } else {
+                throw new Error(result.message || "Failed to fetch doctor list");
+            }
+    } catch (error) {
+        console.error('Error in API call:', error);
+        throw error; // Re-throw the error to be handled by the calling code
+    }
+};
+
+
+export const logoutUser = async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        throw new Error('No auth token found');
+    }
+
+    try {
+        const response = await fetch(`${BASE_URL}/logout`, {
+            method: 'POST',  // or 'DELETE' depending on your API setup
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,  // Send the token in the Authorization header
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to log out');
+        }
+
+        // Optionally return any data you need from the response
+        return await response.json();
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\AppointmentNotification;
 use App\Models\Appointment;
+use App\Models\DoctorSlot;
 use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -32,13 +33,11 @@ class AppointmentController extends Controller
 
             $this->sendEmailNotification($appointment, 'Appointment cancelled');
 
-            return response()->json($appointment);
+            return successResponse($appointment,'Appointment confirmed Successfully!',201);
         } catch (\Exception $e) {
 
-            return response()->json([
-                'message' => 'An error occurred while cancelling the appointment.',
-                'error' => $e->getMessage()
-            ], 500);
+            return failureResponse('An error occurred while confirmed the appointment.',500,$e->getMessage());
+
         }
     }
 
@@ -51,13 +50,11 @@ class AppointmentController extends Controller
 
             $this->sendEmailNotification($appointment, 'Appointment confirmed');
 
-            return response()->json($appointment);
+            return successResponse($appointment,'Appointment confirmed Successfully!',201);
         } catch (\Exception $e) {
 
-            return response()->json([
-                'message' => 'An error occurred while confirming the appointment.',
-                'error' => $e->getMessage()
-            ], 500);
+            return failureResponse('An error occurred while confirmed the appointment.',500,$e->getMessage());
+
         }
     }
 
@@ -67,27 +64,26 @@ class AppointmentController extends Controller
         try {
 
             $request->validate([
-                'timeslot' => 'required',
-                'appointment_date' => 'required',
+                'slot_id' => 'required',
                 'doctor_id' => 'required|exists:doctors,id',
             ]);
+
+            $doctor_slot = DoctorSlot::find($request->slot_id);
 
             $appointment = Appointment::create([
                 'patient_id' => Auth::guard('patient')->user()->id,
                 'doctor_id' => $request->doctor_id,
-                'timeslot' => $request->timeslot,
-                'appointment_date' =>Carbon::parse($request->appointment_date)->format('Y-m-d'),
+                'doctor_slots_id' => $doctor_slot->id,
+                'timeslot' => $doctor_slot->name,
+                'appointment_date' =>Carbon::parse($doctor_slot->date)->format('Y-m-d'),
             ]);
 
             $this->sendEmailNotification($appointment, 'Appointment booked');
 
-            return response()->json($appointment, 201);
+            return successResponse($appointment,'Appointment Created Successfully!',201);
         } catch (\Exception $e) {
+            return failureResponse('An error occurred while booking the appointment.',500,$e->getMessage());
 
-            return response()->json([
-                'message' => 'An error occurred while booking the appointment.',
-                'error' => $e->getMessage()
-            ], 500);
         }
     }
 

@@ -130,7 +130,10 @@ class DoctorController extends Controller
 
     public function DoctorList(){
         try {
-            $doctorList = Doctor::whereHas('slots')->latest()->get();
+            $doctorList =  Doctor::whereHas('slots', function($query) {
+                $query->whereDoesntHave('appointment')
+                ->whereDate('date', '>=', Carbon::today());
+            })->latest()->get();
             return successResponse($doctorList,'Doctor list','201');
 
         } catch (\Exception $e) {
@@ -140,8 +143,11 @@ class DoctorController extends Controller
 
     public function DoctorAvailableSlot($id){
         try {
-            $doctorslotList = Doctor::with('slots')->find($id);
-            return successResponse($doctorslotList,'Doctor Slot List','201');
+            $doctorSlotList = Doctor::with(['slots' => function($query) {
+                $query->whereDoesntHave('appointment')
+                    ->whereDate('date', '>=', Carbon::today());
+            }])->find($id);
+            return successResponse($doctorSlotList,'Doctor Slot List','201');
 
         } catch (\Exception $e) {
             return failureResponse('An error occurred while get doctor list.',500,$e->getMessage());

@@ -60,44 +60,20 @@ class PatientController extends Controller
             $patient = Patient::where('email', $credentials['email'])->first();
 
             if ($patient && Hash::check($credentials['password'], $patient->password)) {
-                $patient = Auth::guard('patient')->user();
+
                 $token = $patient->createToken('PatientApp')->accessToken;
-                return response()->json(['token' => $token,'data'=>$patient]);
+                $patient['token'] = $token;
+                return successResponse($patient,'Login Successfully','201');
             }
 
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return failureResponse('Invalid Credentials',500);
         } catch (\Exception $e) {
 
-            return response()->json([
-                'message' => 'An error occurred while registering the patient.',
-                'error' => $e->getMessage()
-            ], 500);
+            return failureResponse('An error occurred while registering the patient.',500,$e->getMessage());
         }
     }
 
-    public function GetAvailableSlot(Request $request)
-    {
 
-        try {
-            $request->validate([
-                'timeslot' => 'required',
-                'appointment_date' => 'required',
-                'doctor_id' => 'required|exists:doctors,id',
-            ]);
-
-//            $appointment = DoctorSlot::where('')
-
-//            $this->sendEmailNotification($appointment, 'Appointment booked');
-
-//            return response()->json($appointment, 201);
-        } catch (\Exception $e) {
-
-            return response()->json([
-                'message' => 'An error occurred while booking the appointment.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
 
 
 }

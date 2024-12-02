@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
-import { fetchDoctors } from "../Util/api"; // Import API utility
+import { fetchDoctors } from "../Util/api";
+import PatientPanelLayout from "./Patientpanellayout"; // Import API utility
 
 const AuthenticatePatient = () => {
+
     const [doctors, setDoctors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -24,20 +26,24 @@ const AuthenticatePatient = () => {
     }, []);
 
     if (loading) {
-        return <div className="text-center mt-4">Loading...</div>;
+
+        return  <PatientPanelLayout > <div className="text-center mt-4">Loading...</div></PatientPanelLayout>;
     }
 
     if (error) {
         return (
+            <PatientPanelLayout >
             <div className="container mt-4">
                 <div className="alert alert-danger" role="alert">
                     {error}
                 </div>
             </div>
+            </PatientPanelLayout>
         );
     }
 
     return (
+        <PatientPanelLayout >
         <div className="container mt-4">
             <h2 className="mb-4">Doctor List</h2>
             <div className="row">
@@ -66,6 +72,7 @@ const AuthenticatePatient = () => {
                 )}
             </div>
         </div>
+        </PatientPanelLayout>
     );
 };
 
