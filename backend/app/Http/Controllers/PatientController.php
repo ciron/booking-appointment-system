@@ -75,5 +75,17 @@ class PatientController extends Controller
 
 
 
+    public function logout(Request $request)
+    {
+        try {
+            Auth::guard('patient')->user()->token()->revoke();
+            return successResponse('Logout Successfully',500);
+            } catch (\Exception $e) {
+
+            return failureResponse('An error occurred while registering the patient.',500,$e->getMessage());
+        }
+    }
+
+
 
 }

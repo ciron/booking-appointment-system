@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../Util/api';  // API call for registration
+import {Link, useNavigate} from 'react-router-dom';
+import { registerUser } from '../Util/api';
 
 const RegistrationPage = () => {
     const [name, setUsername] = useState('');
@@ -27,16 +27,17 @@ const RegistrationPage = () => {
                     setError('Something went wrong. No token received.');
                 }
             } else {
-                setError(response.message);  // Display error message if the response type is not success
+                setError(response.message);
             }
         } catch (error) {
             setError('Registration failed');
         }
     };
 
+
     return (
-        <div className="container mt-5">
-            <h1 className="text-center">RegistaSer</h1>
+        <div className="container mt-5" style={{ maxWidth: '600px' }}>
+            <h1 className="text-center">Register</h1>
             <form onSubmit={handleRegister}>
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Name</label>
@@ -69,7 +70,13 @@ const RegistrationPage = () => {
                     />
                 </div>
                 {error && <div className="alert alert-danger">{error}</div>}
-                <button type="submit" className="btn btn-primary">Register</button>
+               <div className="d-flex justify-content-between">
+                   <button type="submit" className="btn btn-primary">Register</button>
+                   <p>If you have Account Already?</p>
+                   <Link to="/login" className="btn btn-secondary">
+                       Login
+                   </Link>
+               </div>
             </form>
         </div>
     );

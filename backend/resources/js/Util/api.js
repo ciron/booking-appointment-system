@@ -119,7 +119,7 @@ export const logoutUser = async () => {
     }
 
     try {
-        const response = await fetch(`${BASE_URL}/logout`, {
+        const response = await fetch(`${BASE_URL}/patient/logout`, {
             method: 'POST',  // or 'DELETE' depending on your API setup
             headers: {
                 'Content-Type': 'application/json',
@@ -133,6 +133,31 @@ export const logoutUser = async () => {
 
         // Optionally return any data you need from the response
         return await response.json();
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+
+export const fetchAppointments = async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+        throw new Error('No auth token found');
+    }
+    try {
+        const response = await fetch(`${BASE_URL}/patient/appointments`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        const result = await response.json();
+        if (response.ok && result.type === 'success') {
+            return result.data; // Return the doctor list
+        } else {
+            throw new Error(result.message || "Failed to fetch doctor list");
+        }
     } catch (error) {
         throw new Error(error.message);
     }

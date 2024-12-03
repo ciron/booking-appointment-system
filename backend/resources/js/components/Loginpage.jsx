@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../Util/api';  // Import API utility
+import { Link,useNavigate } from 'react-router-dom';
+import { loginUser } from '../Util/api';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -26,21 +26,17 @@ const LoginPage = () => {
                     setError('Something went wrong. No token received.');
                 }
             } else {
-                setError(response.message);  // Display error message if the response type is not success
+                setError(response.message);
             }
         } catch (error) {
             setError('Login failed');
         }
     };
 
-    const handleRegisterRedirect = () => {
-        navigate('/register');  // Redirect to the registration page
-    };
-
     return (
-        <div className="container mt-5">
+        <div className="container mt-5" style={{ maxWidth: '600px' }}>
             <h1 className="text-center">Login Patient</h1>
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleLogin} >
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email</label>
                     <input
@@ -62,10 +58,15 @@ const LoginPage = () => {
                     />
                 </div>
                 {error && <div className="alert alert-danger">{error}</div>}
+                <div className="d-flex justify-content-between">
                 <button type="submit" className="btn btn-primary">Login</button>
-
+                    <p>If you dont have Account ?</p>
+                    <Link to="/register" className="btn btn-secondary">
+                        Register
+                    </Link>
+                </div>
             </form>
-            <button className="btn btn-secondary" onClick={handleRegisterRedirect}>Register</button>
+
         </div>
     );
 };

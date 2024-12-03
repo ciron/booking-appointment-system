@@ -8,6 +8,7 @@ import RegistrationPage from './components/RegistrationPage';
 import AuthenticatePatient from './components/AuthenticatePatient';
 import Availableslot from './components/Availableslot';
 import BookingConfirmation from './components/Bookingconfirmation';
+import Appointments from './components/Appointment';
 
 const App = () => {
     const navigate = useNavigate();
@@ -37,6 +38,7 @@ const App = () => {
             <Route path="/authenticate-patient" element={<AuthenticatePatient />} />
             <Route path="/available-slot/:doctorId" element={<Availableslot />} />
             <Route path="/booking-confirmation/:slotId" element={<BookingConfirmation />} />
+            <Route path="/appointments" element={<Appointments />} />
         </Routes>
     );
 };

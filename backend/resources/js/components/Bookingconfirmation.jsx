@@ -3,15 +3,15 @@ import { useParams } from 'react-router-dom';
 import PatientPanelLayout from './PatientPanelLayout';
 
 const BookingConfirmation = () => {
-    const [patientName] = useState('John Doe');
+
     const { slotId } = useParams();
 
     return (
-        <PatientPanelLayout patientName={patientName}>
+        <PatientPanelLayout >
         <div className="container mt-5">
             <h1 className="text-center">Booking Confirmation</h1>
             <p className="text-center">
-                Your slot with ID {slotId} has been booked successfully!
+                Your slot  has been booked successfully! For Details Please visit Appointments page.. Thanks
             </p>
         </div>
         </PatientPanelLayout>

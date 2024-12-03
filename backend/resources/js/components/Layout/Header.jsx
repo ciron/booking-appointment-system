@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { logoutUser } from '../../Util/api';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -10,13 +11,21 @@ const Header = () => {
     const patientName = localStorage.getItem('userName');
 
     // Logout function
-    const logout = () => {
-        // Remove auth token and user info from localStorage
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('userName');
+    const logout = async () => {
+        try {
 
-        // Redirect to the login page after logout
-        navigate('/login');
+            await logoutUser();
+
+
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userName');
+
+
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout failed:', error);
+
+        }
     };
 
     return (
@@ -30,17 +39,12 @@ const Header = () => {
                     <ul className="navbar-nav ms-auto">
                         {authToken ? (
                             <>
-                                <li className="nav-item">
-                                    <span className="navbar-text mt-3">
+                                <li className="nav-item mt-2">
+                                    <span className="navbar-text">
                                         Welcome, {patientName}
                                     </span>
                                 </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/notifications">
-                                        <i className="bi bi-bell"></i>
-                                        Notifications {notifications > 0 && <span className="badge bg-danger">{notifications}</span>}
-                                    </Link>
-                                </li>
+
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/appointments">Appointments</Link>
                                 </li>

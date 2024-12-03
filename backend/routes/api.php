@@ -30,9 +30,8 @@ Route::middleware('guest')->group(function () {
             Route::get('/doctor-list', [DoctorController::class, 'DoctorList']);
             Route::get('/doctor-slot-list/{id}', [DoctorController::class, 'DoctorAvailableSlot']);
             Route::post('/appointments/book', [AppointmentController::class, 'bookAppointment']);
-            Route::put('/appointments/{id}/confirm', [AppointmentController::class, 'confirmAppointment']);
-            Route::put('/appointments/{id}/cancel', [AppointmentController::class, 'cancelAppointment']);
-            Route::post('/logout', [PatientController::class, 'Logout']);
+            Route::get('/appointments', [AppointmentController::class, 'Appointments']);
+            Route::post('/logout', [PatientController::class, 'logout']);
         });
     });
 });

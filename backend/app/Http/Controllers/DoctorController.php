@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\DoctorSlot;
 use Carbon\Carbon;
@@ -16,11 +17,17 @@ class DoctorController extends Controller
 
     public function loginForm()
     {
+        if (Auth::guard('doctor')->check()) {
+            return redirect()->route('dashboard');
+        }
         return view('login');
     }
 
     public function registerForm()
     {
+        if (Auth::guard('doctor')->check()) {
+            return redirect()->route('dashboard');
+        }
         return view('Register');
     }
 
@@ -85,7 +92,7 @@ class DoctorController extends Controller
 
     public function ManageCalender()
     {
-        $created_slot = DoctorSlot::where('doctor_id',Auth::guard('doctor')->user()->id)->get();
+        $created_slot = DoctorSlot::where('doctor_id',Auth::guard('doctor')->user()->id)->where('date','>=', Carbon::today())->get();
         $avaliable_slot =  AvailableSlot($created_slot->pluck('name')->toArray());
 
        $allSlots = All_slots();
@@ -152,6 +159,12 @@ class DoctorController extends Controller
         } catch (\Exception $e) {
             return failureResponse('An error occurred while get doctor list.',500,$e->getMessage());
         }
+    }
+
+    public function UpcomingAppointment()
+    {
+        $appointments = Appointment::where('doctor_id',Auth::guard('doctor')->user()->id)->where('appointment_date','>=', Carbon::today())->with('patient')->latest()->get();
+        return view('UpcomingAppoinment',compact('appointments'));
     }
 
 

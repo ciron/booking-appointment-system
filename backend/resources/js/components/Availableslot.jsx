@@ -57,7 +57,6 @@ const AvailableSlot = () => {
             try {
                 // Call booking API
                 await bookSlot(event.id,doctorId);
-                alert('Slot booked successfully! Redirecting to confirmation page...');
                 navigate(`/booking-confirmation/${event.id}`); // Redirect to confirmation page
             } catch (error) {
                 alert(`Booking failed: ${error.message}`);

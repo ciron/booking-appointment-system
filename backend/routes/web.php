@@ -12,9 +12,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/{any}', function () {
-    return view('welcome');
-})->where('any', '.*');
+
+
 Route::prefix('doctor')->group(function () {
     Route::get('/login', [DoctorController::class, 'loginForm'])->name('login');
     Route::get('/register', [DoctorController::class, 'registerForm'])->name('register');
@@ -28,5 +27,11 @@ Route::prefix('doctor')->group(function () {
         Route::post('/schedule', [DoctorController::class, 'updateSchedule']);
         Route::post('/addNewSlot', [DoctorController::class, 'addNewSlot'])->name('addNewSlot');
         Route::get('/AvailableForCreate', [DoctorController::class, 'AvailableForCreate'])->name('AvailableForCreate');
+        Route::get('/upcomingAppointment', [DoctorController::class, 'UpcomingAppointment'])->name('UpcomingAppointment');
+        Route::patch('/appointments/{id}/confirm', [AppointmentController::class, 'confirmAppointment'])->name('confirmAppointment');
+        Route::patch('/appointments/{id}/cancel', [AppointmentController::class, 'cancelAppointment'])->name('cancelAppointment');
     });
 });
+Route::get('/{any}', function () {
+    return view('welcome');
+})->where('any', '.*');
