@@ -129,6 +129,7 @@
       <path value="$PROJECT_DIR$/backend/vendor/doctrine/lexer" />
       <path value="$PROJECT_DIR$/backend/vendor/mockery/mockery" />
       <path value="$PROJECT_DIR$/backend/vendor/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/backend/vendor/brian2694/laravel-toastr" />
     </include_path>
   </component>
   <component name="PhpUnit">
