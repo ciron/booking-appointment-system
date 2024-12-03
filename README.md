@@ -90,7 +90,7 @@ Before setting up the project, make sure you have the following installed:
    ```bash   
    php artisan passport:install
   
-5. **Run Passport Migrations:**
+5. **Run  Migrations:**
    ```bash   
    php artisan migrate
 6. **Run Seeder command for dammy patient and doctor:**
@@ -113,7 +113,9 @@ After that if user Hit this url http://127.0.0.1:8000/ its automatic redirect on
 Live Url is : https://demo.dadacuisine.com/
 
 Patient Credentials: 
+
 Email:patient@gmail.com
+
 password:123456
 
 
@@ -151,7 +153,7 @@ Doctors can view a list of their upcoming appointments.
 
 #### Appointment Confirmation/ Cancellation with Email Notifications
 Doctors can Confirm/ cancel appointments, and the system will notify patients via email.
-
+here i atatched screenshot because in live server i didnot setup email config, its one mailtrap sandbox.
 ![Notification Screenshot](public/notification.png)
 
 ## Frontend Development
