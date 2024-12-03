@@ -1,4 +1,4 @@
-const BASE_URL = 'https://demo.dadacuisine.com/api';  // Your backend API base URL
+const BASE_URL = 'http://127.0.0.1:8000/api';  // Your backend API base URL
 
 export const registerUser = async (userData) => {
     try {
