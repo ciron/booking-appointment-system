@@ -6,6 +6,7 @@ use App\Notifications\AppointmentNotification;
 use App\Models\Appointment;
 use App\Models\DoctorSlot;
 use App\Models\Patient;
+use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,14 +37,14 @@ class AppointmentController extends Controller
 
             // Send email notification
             $this->sendEmailNotification($appointment, 'Appointment '.$appointment->timeslot.' is  cancelled');
-
-            return back()->with('success', 'Appointment cancelled successfully!');
+            Toastr::success('Appointment cancelled successfully!');
+            return back();
         } catch (\Exception $e) {
 
             Log::error('Error cancelling appointment: ' . $e->getMessage());
 
-
-            return back()->with('error', 'There was an error cancelling the appointment. Please try again later.');
+            Toastr::error('There was an error cancelling the appointment. Please try again later.');
+            return back();
         }
     }
 
@@ -55,7 +56,9 @@ class AppointmentController extends Controller
             $appointment->save();
 
             $this->sendEmailNotification($appointment, 'Appointment confirmed at '.$appointment->timeslot);
-            return back()->with('success', 'Appointment confirmed successfully!');
+
+            Toastr::success('Appointment confirmed successfully!');
+            return back();
         } catch (\Exception $e) {
 
             Log::error('Error cancelling appointment: ' . $e->getMessage());

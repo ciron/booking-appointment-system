@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\DoctorSlot;
+use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -131,6 +132,7 @@ class DoctorController extends Controller
                ]);
            }
        }
+       Toastr::success('New Slot Added Successfully!');
        return back();
 
     }
